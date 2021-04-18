@@ -1,0 +1,100 @@
+import discord
+import betting
+import rewards
+from functions import help_info
+
+token = 'token here'
+client = discord.Client()
+
+channel = client.get_channel(830477668276502548)
+
+
+
+@client.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(client))
+
+@client.event
+async def on_message(message):
+    #ensures the message is not from itself and it's in the right channel
+    if message.author == client.user or message.channel.name != 'basement-bets':
+        return
+
+    #splits message into an list
+    userMessage = message.content.split()
+    user = str(message.author) + ' '
+
+
+    if userMessage[0] == '!help':
+        outPut = help_info(user)
+        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+        print(user + outPut)
+
+    if userMessage[0] == '!bet':
+        outPut = betting.place_bet(user, userMessage, message.id)
+        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+        print(user + outPut)
+
+    if userMessage[0] == '!register':
+        outPut = betting.register(user)
+        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+        print(user + outPut)
+
+#    if userMessage[0] == '!deregister':
+#        outPut = betting.deregister(user)
+#        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+#        print(user + outPut)
+
+    if userMessage[0] == '!balance':
+        outPut = betting.balance(user)
+        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+        print(user + outPut)
+
+    if userMessage[0] == '!current':
+        outPut = betting.current_bets(user)
+        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+        print(user + outPut)
+
+    if userMessage[0] == '!bonus':
+        outPut = betting.daily_bonus(user)
+        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+        print(user + outPut)
+
+    if userMessage[0] == '!shop':
+        outPut = rewards.list_all()
+        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+        print(user + outPut)
+
+    if userMessage[0] == '!cashin':
+        outPut = rewards.cash_in(user, userMessage)
+        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+        print(user + outPut)
+
+
+@client.event
+async def on_reaction_add(reaction, user):
+    #ensures the message is not from itself and it's in the right channel
+    if reaction.message.author == client.user or reaction.message.channel.name != 'basement-bets':
+        return
+    
+    #ensures that the user is a moderator by their group
+    roleList = []
+    for role in user.roles:
+        roleList.append(str(role))
+    if 'Bet mods' not in roleList:
+        return
+
+    #calls the appropriate function based on the emoji sent by the mod
+    if reaction.emoji == '👍':
+        outPut = betting.bet_won(reaction.message.id)
+        await client.get_channel(830477668276502548).send('{0.author.mention}, '.format(reaction.message) + outPut)
+        print(outPut)
+
+    elif reaction.emoji == '👎':
+        outPut = betting.bet_loss(reaction.message.id)
+        await client.get_channel(830477668276502548).send('{0.author.mention}, '.format(reaction.message) + outPut)
+        print(outPut)
+
+
+if __name__ == '__main__':
+    client.run(token)

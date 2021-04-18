@@ -1,0 +1,22 @@
+{
+    "All Fill": {
+        "cost": 300.0,
+        "description": "Everyone in your current League of Legends party must queue the next game as fill",
+        "purchase count": 0
+    },
+    "All Random": {
+        "cost": 300.0,
+        "description": "Everyone in your current League of Legends party must play random champions next game",
+        "purchase count": 0
+    },
+    "I Choose You": {
+        "cost": 150.0,
+        "description": "You can pick the champion for somebody in your current League of Legends party",
+        "purchase count": 0
+    },
+    "Role With The Times": {
+        "cost": 150.0,
+        "description": "You can pick the role for somebody in your current League of Legends party",
+        "purchase count": 0
+    }
+}
