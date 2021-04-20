@@ -31,6 +31,9 @@ def place_bet(userName, userMessage, messageID):
     except ValueError:
         return("Please reformat your bet. The syntax is: '!bet [number] [criteria]'")
 
+    if amount < 5:
+        return("Sorry, minimum bet size must be 5 BB Coins.")
+
     #removes the !bet and amout and then formats the userMessage into a string
     userMessage = userMessage[2:]
     userMessage = ' '.join(userMessage) # turn the message from a list into string
