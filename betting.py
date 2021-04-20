@@ -49,7 +49,7 @@ def place_bet(userName, userMessage, messageID):
 
     save_data(ACCOUNTS, accountData)
     save_data(LIVEBETS, betData)
-    return(f'You have placed a bet of {amount} on "{userMessage}". Your new remaining balance is {accountData[userName]["balance"]}. Good luck!')
+    return(f'You have placed a bet of {amount} BBs on "{userMessage}". Your new remaining balance is {accountData[userName]["balance"]}. Good luck!')
 
 
 def balance(userName):
@@ -59,7 +59,7 @@ def balance(userName):
     accountData = load_data(ACCOUNTS)
 
     userBalance = accountData[userName]["balance"]
-    return(f"Your current balance is: {userBalance}.")
+    return(f"Your current balance is: {userBalance} BB Coins.")
 
 
 def current_bets(userName):
@@ -76,7 +76,7 @@ def current_bets(userName):
     matches = []
     for item in name:
         if betData[item]["User"] == userName:
-            matches.append(f'''Bet of {betData[item]['Bet amount']} placed for: "{betData[item]['Criteria']}".
+            matches.append(f'''Bet of {betData[item]['Bet amount']} BBs placed for: "{betData[item]['Criteria']}".
 ''')
     if len(matches) == 0:
         return("You currently have no active bets.")
@@ -126,7 +126,7 @@ def bet_won(messageID):
 
             #add the bet to betting history
             historyData = load_data(BETTINGHISTORY)
-            historyData[messageID] = {"User": user, "Bet amount": betValue, "Criteria": betCriteria, "Win/Loss": "Win"}
+            historyData[messageID] = {"User": user, "Bet amount": betValue, "Criteria": betCriteria, "Win/Loss": "Win", "Date": get_date()}
             save_data(BETTINGHISTORY, historyData)
 
             return(f"You have won your bet! You have gained {int(gained)} to give you a new total balance of {int(newBalance)}.")
@@ -153,7 +153,7 @@ def bet_loss(messageID):
             #add the bet to betting history
 
             historyData = load_data(BETTINGHISTORY)
-            historyData[messageID] = {"User": user, "Bet amount": betValue, "Criteria": betCriteria, "Win/Loss": "Loss"}
+            historyData[messageID] = {"User": user, "Bet amount": betValue, "Criteria": betCriteria, "Win/Loss": "Loss", "Date": get_date()}
             save_data(BETTINGHISTORY, historyData)
 
             return(f"You have lost your bet! You have lost {betValue}, leaving your current balance at {userBalance}. Better luck next time!")
@@ -174,18 +174,4 @@ def daily_bonus(userName):
     accountData[userName]["balance"] += bonus
 
     save_data(ACCOUNTS, accountData)
-    return(f"Your daily bonus is: {bonus}! This puts your current balance at {accountData[userName]['balance']}. Come back tomorrow for more!")
-
-
-if __name__ == '__main__':
-    test = help_info("Jack")
-    #test = register("Jack")
-    #test = deregister("Jack")
-    #test = place_bet("Jack", ["!bet", "600", "I", "am", "the", "best"], 563764675)
-    #test = balance("Jack")
-    #test = current_bets("Jack")
-    #test = bet_won(563764675)
-    #test = bet_loss(563764675)
-    #test = daily_bonus("Jack")
-
-    print(test)
+    return(f"Your daily bonus is: {bonus} BB Coins! This puts your current balance at {accountData[userName]['balance']}. Come back tomorrow for more!")

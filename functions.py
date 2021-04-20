@@ -26,6 +26,7 @@ def load_data(targetLocation):
             return(data)
     except FileNotFoundError:
         print(f"Could not load {targetLocation}")
+        verify_data()
         data = {}
         return(data)
 
