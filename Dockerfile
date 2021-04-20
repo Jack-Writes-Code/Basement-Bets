@@ -7,7 +7,9 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
+# Please enter your server token and the name of the channel you want monitored here
 ENV TOKEN=
+ENV CHANNELNAME= 
 
 # Install pip requirements
 COPY requirements.txt .

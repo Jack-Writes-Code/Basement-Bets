@@ -7,10 +7,9 @@ from functions import help_info
 
 
 token = str(os.environ['TOKEN'])
+channelName = str(os.environ['CHANNELNAME'])
+
 client = discord.Client()
-
-channel = client.get_channel(830477668276502548)
-
 
 @client.event
 async def on_ready():
@@ -20,7 +19,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     #ensures the message is not from itself and it's in the right channel
-    if message.author == client.user or message.channel.name != 'basement-bets':
+    if message.author == client.user or message.channel.name != channelName:
         return
 
     #splits message into an list
@@ -77,7 +76,7 @@ async def on_message(message):
 @client.event
 async def on_reaction_add(reaction, user):
     #ensures the message is not from itself and it's in the right channel
-    if reaction.message.author == client.user or reaction.message.channel.name != 'basement-bets':
+    if reaction.message.author == client.user or reaction.message.channel.name != channelName:
         return
     
     #ensures that the user is a moderator by their group
