@@ -6,7 +6,7 @@ LIVEBETS = 'data/live_bets.json'
 BETTINGHISTORY = 'data/betting_history.json'
 REWARDS = 'data/rewards.json'
 
-def varify_data():
+def verify_data():
     dataList = [ACCOUNTS, LIVEBETS, BETTINGHISTORY, REWARDS]
     for data in dataList:
         try:
@@ -17,7 +17,7 @@ def varify_data():
             jsonData = {}
             with open(data, 'w') as dataFile:
                 json.dump(jsonData, dataFile, indent=4)
-            print(f'{data} not found. Created.')
+            print(f'{data} not found. Created new file.')
 
 def load_data(targetLocation):
     try:
@@ -44,6 +44,7 @@ def get_date():
 
 def help_info(userName):
     return(f"""
+    
 Here's what you can do:
 
 !register
@@ -55,6 +56,10 @@ Here's what you can do:
 !cashin [item number as per list in !shop] (purchase your chosen reward!)
 
 Upon placing a bet, you must then follow it up by replying to your original message where you placed the bet, with proof that it was completed. I.E a screenshot. A Bet-Mod will then 'react' to the message to confirm whether it was a success or failure!
+
+Anyone who signs up using !register, agrees that if a reward is redeemed by another member while you're partied up- you will honour it and do what they've paid for!
+
+In the spirit of keeping it fun, please don't submit intentionally bias bets, or bets that aren't yes/no. Try keep it competative with some real risk!
 """)
 
 def register_check(userName):

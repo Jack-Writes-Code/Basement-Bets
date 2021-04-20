@@ -4,17 +4,17 @@ import discord
 import betting
 import rewards
 from functions import help_info
-
+from functions import verify_data
 
 token = str(os.environ['TOKEN'])
 channelName = str(os.environ['CHANNELNAME'])
+betMod = str(os.environ['BETMOD'])
 
 client = discord.Client()
 
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-
 
 @client.event
 async def on_message(message):
@@ -25,7 +25,6 @@ async def on_message(message):
     #splits message into an list
     userMessage = message.content.split()
     user = str(message.author) + ' '
-
 
     if userMessage[0] == '!help':
         outPut = help_info(user)
@@ -83,7 +82,7 @@ async def on_reaction_add(reaction, user):
     roleList = []
     for role in user.roles:
         roleList.append(str(role))
-    if 'Bet mods' not in roleList:
+    if betMod not in roleList:
         return
 
     #calls the appropriate function based on the emoji sent by the mod
