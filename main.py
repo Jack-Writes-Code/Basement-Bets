@@ -1,18 +1,21 @@
+import os
+
 import discord
 import betting
 import rewards
 from functions import help_info
 
-token = 'token here'
+
+token = str(os.environ['TOKEN'])
 client = discord.Client()
 
 channel = client.get_channel(830477668276502548)
 
 
-
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
+
 
 @client.event
 async def on_message(message):
