@@ -6,6 +6,19 @@ LIVEBETS = 'data/live_bets.json'
 BETTINGHISTORY = 'data/betting_history.json'
 REWARDS = 'data/rewards.json'
 
+def varify_data():
+    dataList = [ACCOUNTS, LIVEBETS, BETTINGHISTORY, REWARDS]
+    for data in dataList:
+        try:
+            with open(data) as dataFile:
+                print(f'{data} loaded.')
+                pass
+        except FileNotFoundError:
+            jsonData = {}
+            with open(data, 'w') as dataFile:
+                json.dump(jsonData, dataFile, indent=4)
+            print(f'{data} not found. Created.')
+
 def load_data(targetLocation):
     try:
         with open(targetLocation) as dataFile:
@@ -28,7 +41,6 @@ def get_date():
     currentDate.append(dateValue.strftime("%d"))
     currentDate = ''.join(currentDate)
     return(int(currentDate))
-
 
 def help_info(userName):
     return(f"""
