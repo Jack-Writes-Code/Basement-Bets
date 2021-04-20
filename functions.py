@@ -51,7 +51,7 @@ Here's what you can do:
 !bet [amount] [criteria/what you are betting to happen]
 !balance (dispays current balance)
 !current (to show current outstanding bets)
-!bonus (gives you a daily bonus of between 1-100 points!)
+!bonus (gives you a daily bonus of between 1-100BB coins!)
 !shop (to see what's available for purchase)
 !cashin [item number as per list in !shop] (purchase your chosen reward!)
 
@@ -59,7 +59,7 @@ Upon placing a bet, you must then follow it up by replying to your original mess
 
 Anyone who signs up using !register, agrees that if a reward is redeemed by another member while you're partied up- you will honour it and do what they've paid for!
 
-In the spirit of keeping it fun, please don't submit intentionally bias bets, or bets that aren't yes/no. Try keep it competative with some real risk!
+In the spirit of keeping it fun, please don't submit intentionally bias bets, or bets that aren't yes/no. Try keep it competitive with some real risk!
 """)
 
 def register_check(userName):

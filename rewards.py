@@ -11,7 +11,7 @@ def list_all():
     fullList = ["""Here are the following items available for purchase:
 """]
     for i in range(len(name)):
-        fullList.append(f"""{i}: {name[i]}. Cost: {int(rewardData[name[i]]["cost"])}. {rewardData[name[i]]["description"]}.
+        fullList.append(f"""{i}: {name[i]}. Cost: {int(rewardData[name[i]]["cost"])}BB Coins. {rewardData[name[i]]["description"]}.
 """)
     sentence = ""
     for item in fullList:
