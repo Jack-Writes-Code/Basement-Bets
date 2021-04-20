@@ -98,4 +98,5 @@ async def on_reaction_add(reaction, user):
 
 
 if __name__ == '__main__':
+    verify_data()
     client.run(token)
