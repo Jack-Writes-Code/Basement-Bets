@@ -11,7 +11,7 @@ In order to approve bets as won or lost, you'll need a to assign users to your s
 
 
 If you're using docker:
-You must declare the ENV variables on the Dockerfile. The variable names are: 'TOKEN', 'CHANNELNAME', 'BETMOD'.
+You must declare the ENV variables on the Dockerfile. The variable names are: 'TOKEN', 'CHANNELNAME', 'CHANNELID', 'BETMOD'.
 Finally, please be sure to mount the volume at boot with '-v your-location:/app' when running the container. This allows you to not lose progress when rebooting the bot.
 
 Enjoy! Any issues, please feel free to submit a pull request.
