@@ -8,6 +8,7 @@ from functions import verify_data
 
 token = str(os.environ['TOKEN'])
 channelName = str(os.environ['CHANNELNAME'])
+chennelID = int(os.environ['CHANNELID'])
 betMod = str(os.environ['BETMOD'])
 
 client = discord.Client()
@@ -88,12 +89,12 @@ async def on_reaction_add(reaction, user):
     #calls the appropriate function based on the emoji sent by the mod
     if reaction.emoji == '👍':
         outPut = betting.bet_won(reaction.message.id)
-        await client.get_channel(830477668276502548).send('{0.author.mention}, '.format(reaction.message) + outPut)
+        await client.get_channel(chennelID).send('{0.author.mention}, '.format(reaction.message) + outPut)
         print(outPut)
 
     elif reaction.emoji == '👎':
         outPut = betting.bet_loss(reaction.message.id)
-        await client.get_channel(830477668276502548).send('{0.author.mention}, '.format(reaction.message) + outPut)
+        await client.get_channel(chennelID).send('{0.author.mention}, '.format(reaction.message) + outPut)
         print(outPut)
 
 
