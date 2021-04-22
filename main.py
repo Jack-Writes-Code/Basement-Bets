@@ -27,10 +27,14 @@ async def on_message(message):
     userMessage = message.content.split()
     user = str(message.author) + ' '
 
-    if userMessage[0] == '!help':
-        outPut = help_info(user)
-        await message.channel.send('{0.author.mention}, '.format(message) + outPut)
-        print(user + outPut)
+
+    try:
+        if userMessage[0] == '!help':
+            outPut = help_info(user)
+            await message.channel.send('{0.author.mention}, '.format(message) + outPut)
+            print(user + outPut)
+    except IndexError: #if user didn't enter a message, it assigns something to the index to prevent errors
+        userMessage = ['blank']
 
     if userMessage[0] == '!bet':
         outPut = betting.place_bet(user, userMessage, message.id)
