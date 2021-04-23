@@ -46,10 +46,11 @@ def cash_in(userName, userMessage):
     if accountData[userName]["balance"] < rewardData[name[choiceOfPurchase]]["cost"]:
         return(f"Sorry. You do not currently have enough funds for this purchase. Cost of item is {int(rewardData[name[choiceOfPurchase]]['cost'])}, and your current balance is {accountData[userName]['balance']}.")
 
-    accountData[userName]["balance"] -= rewardData[name[choiceOfPurchase]]["cost"]
+    accountData[userName]["balance"] -= int(rewardData[name[choiceOfPurchase]]["cost"])
     accountData[userName]["total purchases"] += 1
+    accountData[userName]["total spent"] += rewardData[name[choiceOfPurchase]]["cost"]
 
-    rewardData[name[choiceOfPurchase]]["cost"] *= 1.1
+    rewardData[name[choiceOfPurchase]]["cost"] = round(rewardData[name[choiceOfPurchase]]["cost"] * 1.1)
     rewardData[name[choiceOfPurchase]]["purchase count"] += 1
 
     save_data(ACCOUNTS, accountData)
