@@ -48,7 +48,7 @@ def cash_in(userName, userMessage):
 
     accountData[userName]["balance"] -= int(rewardData[name[choiceOfPurchase]]["cost"])
     accountData[userName]["total purchases"] += 1
-    accountData[userName]["total spent"] += rewardData[name[choiceOfPurchase]]["cost"]
+    accountData[userName]["total spent"] += int(rewardData[name[choiceOfPurchase]]["cost"])
 
     rewardData[name[choiceOfPurchase]]["cost"] = round(rewardData[name[choiceOfPurchase]]["cost"] * 1.1)
     rewardData[name[choiceOfPurchase]]["purchase count"] += 1
