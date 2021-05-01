@@ -315,7 +315,7 @@ def gamble(userID, userMessage):
 
     accountData[userID]["balance"] -= amount
 
-    number = random.randrange(1,3)
+    number = random.randrange(1,4)
 
     if number == 1:
         accountData[userID]["balance"] += int(amount*2)
