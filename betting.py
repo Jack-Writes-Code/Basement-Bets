@@ -1,72 +1,108 @@
 from functions import *
 import random
+   
+def daily_bonus(userID):
+    if register_check(userID):
+        return("You are not registered, so you can't redeem your free, daily points")
 
-
-def register(userName):
-    if register_check(userName) == False:
-        return("You are already registered! If you'd like to know your current balance, try '!balance'. Or, try '!help' for more options!")
     accountData = load_data(ACCOUNTS)
-    accountData[userName] = {"balance": 100, "total gain": 0,"total loss": 0, "total spent": 0, "total purchases": 0, "bets placed": 0, "bets won": 0, "bets lost": 0, "last bonus": get_date()-1}
+
+    if accountData[userID]["last bonus"] >= get_date():
+        return("You have already redeemed today. Come back tomorrow!")
+
+    accountData[userID]["last bonus"] = get_date()
+
+    bonus = random.randrange(0,100)+1
+
+    accountData[userID]["balance"] += bonus
+
     save_data(ACCOUNTS, accountData)
-    return(f"You are now signed up! Your starting balance is {accountData[userName]['balance']}!")
+    return(f"Your daily bonus is: {bonus} BB Coins! This puts your current balance at {accountData[userID]['balance']}. Come back tomorrow for more!")
 
+def place_bet(userID, userMessage, messageID):
 
-def deregister(userName):
-    if register_check(userName):
-        return("You are not registered, so you can't deregister.")
-    accountData = load_data(ACCOUNTS)
-    accountData.pop(userName)
-    save_data(ACCOUNTS, accountData)
-    return("You have deregistered from the Basement Bets games")
-    
-
-def place_bet(userName, userMessage, messageID):
-
-    if register_check(userName):
+    if register_check(userID):
         return("You are not registered, so you can't place a bet.")
 
     #convert the number entered into an int
     try:
         amount = int(userMessage[1])
     except ValueError:
-        return("Please reformat your bet. The syntax is: '!bet [number] [criteria]'")
+        return("Please reformat your bet. The syntax is: '!bet [value] [criteria]'")
 
     if amount < 5:
         return("Sorry, minimum bet size must be 5 BB Coins.")
 
     #removes the !bet and amout and then formats the userMessage into a string
-    userMessage = userMessage[2:]
-    userMessage = ' '.join(userMessage) # turn the message from a list into string
+    userMessage = ' '.join(userMessage[2:])
 
     #load account and current bet data
     accountData = load_data(ACCOUNTS)
     betData = load_data(LIVEBETS)
 
     #make sure they can afford to place the bet
-    if amount > accountData[userName]["balance"]:
-        return(f"Sorry, you do not have enough money in your account for this bet. Your current balance is {accountData[userName]['balance']}")
+    if amount > accountData[userID]["balance"]:
+        return(f"Sorry, you do not have enough money in your account for this bet. Your current balance is {accountData[userID]['balance']}")
 
-    accountData[userName]["balance"] -= amount #adjust the users account balance
-    betData[messageID] = {"User": userName, "Bet amount": amount, "Criteria": userMessage} #create data for their bet
-    accountData[userName]["bets placed"] += 1 #add to the total number of placed bets
+    accountData[userID]["balance"] -= amount #adjust the users account balance
+    betData[messageID] = {"User": userID, "Bet amount": amount, "Criteria": userMessage} #create data for their bet
+    accountData[userID]["bets placed"] += 1 #add to the total number of placed bets
 
     save_data(ACCOUNTS, accountData)
     save_data(LIVEBETS, betData)
-    return(f'You have placed a bet of {amount} BBs on "{userMessage}". Your new remaining balance is {accountData[userName]["balance"]}. Good luck!')
+    return(f'You have placed a bet of {amount} BBs on "{userMessage}". Your new remaining balance is {accountData[userID]["balance"]}. Good luck!')
 
+def challenge(userID, userMessage, messageID):
+    if register_check(userID):
+        return("You are not registered, so you can't challenge others yet.")
 
-def balance(userName):
-    if register_check(userName):
-        return("You are not registered, so you can't check balance.")
-    
+    if len(userMessage) < 4:
+        return("Message too short. Please reformat your challenge. The syntax is: '!challenge [@user] [value] [criteria]'")
+
+    #ID of the user being challenged
+    try:
+        targetUser = userMessage[1][3:-1]
+    except IndexError:
+        return("Please reformat your challenge. The syntax is: '!challenge [@user] [value] [criteria]'")
+
+    if register_check(targetUser):
+        return("The person you're challenging isn't registered for Basement Bets. The syntax is: '!challenge [@user] [value] [criteria]'")
+    if userID == targetUser:
+        return("You can't challenge yourself. Use !bet instead.")
+
+    try:
+        amount = int(userMessage[2])
+    except ValueError:
+        return("Please reformat your challenge. The syntax is: '!challenge [@user] [value] [criteria]'")
+
+    #removes the !bet and amout and then formats the userMessage into a string
+    userMessage = ' '.join(userMessage[3:])
+
+    #targetUser amount userMessage
     accountData = load_data(ACCOUNTS)
+    challengeData = load_data(PENDINGCHALLENGES)
 
-    userBalance = accountData[userName]["balance"]
-    return(f"Your current balance is: {userBalance} BB Coins.")
+    #make sure they can afford the challenge
+    if amount > accountData[userID]["balance"]:
+        return(f"Sorry, you do not have enough money in your account for this challenge. Your current balance is {accountData[userID]['balance']}")
+    elif amount > accountData[targetUser]["balance"]:
+        return(f"Sorry, they do not have enough money in their account for this challenge.Their current balance is {accountData[targetUser]['balance']}")
 
+    #create data for the challenge
+    challengeData[messageID] = {"Challenger": userID, "Challenger Name": accountData[userID]["name"], "Challenged": targetUser, "Challenged Name": accountData[targetUser]["name"], "Bet amount": amount, "Criteria": userMessage, "Accepted": "False"} #create date for challenge
 
-def current_bets(userName):
-    if register_check(userName):
+    #up the numbers on the accounts for challenges issued/received
+    accountData[userID]["challenges issued"] += 1
+    accountData[userID]["balance"] -= amount
+    accountData[targetUser]["challenges received"] += 1
+
+    save_data(ACCOUNTS, accountData)
+    save_data(PENDINGCHALLENGES, challengeData)
+
+    return(f'You are challenging <@{targetUser}> to "{userMessage}" for {amount} BB Coins. <@{targetUser}>, please react to this message with either 👍 or 👎 to accept/decline!')
+
+def current_bets(userID):
+    if register_check(userID):
         return("You are not registered, so you have no outstanding bets")
 
     betData = load_data(LIVEBETS)
@@ -78,7 +114,7 @@ def current_bets(userName):
     #check to see if any belong to the user, and add them to a list if they do
     matches = []
     for item in name:
-        if betData[item]["User"] == userName:
+        if betData[item]["User"] == userID:
             matches.append(f'''Bet of {betData[item]['Bet amount']} BBs placed for: "{betData[item]['Criteria']}".
 ''')
     if len(matches) == 0:
@@ -90,7 +126,6 @@ def current_bets(userName):
         sentence += match
     sentence = sentence[:-1]
     return(sentence)
-
 
 def bet_won(messageID):
     accountData = load_data(ACCOUNTS)
@@ -129,10 +164,11 @@ def bet_won(messageID):
 
             #add the bet to betting history
             historyData = load_data(BETTINGHISTORY)
-            historyData[messageID] = {"User": user, "Bet amount": betValue, "Criteria": betCriteria, "Win/Loss": "Win", "Date": get_date()}
+
+            historyData[messageID] = {"User": user, "Name": accountData[user]["name"], "Bet amount": betValue, "Criteria": betCriteria, "Win/Loss": "Win", "Date": get_date()}
             save_data(BETTINGHISTORY, historyData)
 
-            return(f"You have won your bet! You have gained {int(gained)} to give you a new total balance of {int(newBalance)}.")
+            return(f"<@{user}>, You have won your bet! You have gained {int(gained)} to give you a new total balance of {int(newBalance)}.")
 
 def bet_loss(messageID):
     accountData = load_data(ACCOUNTS)
@@ -154,27 +190,99 @@ def bet_loss(messageID):
             save_data(LIVEBETS, betData)
 
             #add the bet to betting history
-
             historyData = load_data(BETTINGHISTORY)
-            historyData[messageID] = {"User": user, "Bet amount": betValue, "Criteria": betCriteria, "Win/Loss": "Loss", "Date": get_date()}
+            
+            historyData[messageID] = {"User": user, "Name": accountData[user]["name"], "Bet amount": betValue, "Criteria": betCriteria, "Win/Loss": "Loss", "Date": get_date()}
             save_data(BETTINGHISTORY, historyData)
 
-            return(f"You have lost your bet! You have lost {betValue}, leaving your current balance at {userBalance}. Better luck next time!")
+            return(f"<@{user}>, you have lost your bet! You have lost {betValue}, leaving your current balance at {userBalance}. Better luck next time!")
 
-def daily_bonus(userName):
-    if register_check(userName):
-        return("You are not registered, so you can't redeem your free, daily points")
-
+def challenge_accepted(messageID, userID):
     accountData = load_data(ACCOUNTS)
+    challengeData = load_data(PENDINGCHALLENGES)
+    activeChallengeData = load_data(ACTIVECHALLENGES)
 
-    if accountData[userName]["last bonus"] >= get_date():
-        return("You have already redeemed today. Come back tomorrow!")
+    for challenge in challengeData: #for every challenge
+        if challengeData[challenge]["Accepted"] == "False":
+            if int(messageID) == int(challenge) and int(userID) == int(challengeData[challenge]["Challenged"]):
 
-    accountData[userName]["last bonus"] = get_date()
+                #assign the challenged to variables for ease
+                challenged = challengeData[challenge]["Challenged"]
+                challenger = challengeData[challenge]["Challenger"]
+                VALUE = challengeData[challenge]["Bet amount"]
 
-    bonus = random.randrange(0,100)+1
+                #incriment counters on the account and accordingly
+                accountData[challenged]["challenges accepted"] += 1
 
-    accountData[userName]["balance"] += bonus
+                #take money from participant until challenge is settled
+                accountData[challenged]["balance"] -= VALUE
+
+                #update the challenge status
+                challengeData[challenge]["Accepted"] = "True"
+
+                activeChallengeData[int(messageID)] = challengeData[challenge]
+                challengeData.pop(challenge)
+
+                save_data(ACCOUNTS, accountData)
+                save_data(PENDINGCHALLENGES, challengeData)
+                save_data(ACTIVECHALLENGES, activeChallengeData)
+
+                return(f"<@{challenger}>, <@{challenged}> has accepted your challenge! The winner of the challenge must react to this message with a '👍' to earn their winnings! Good luck!")
+
+def challenge_declined(messageID, userID):
+    accountData = load_data(ACCOUNTS)
+    challengeData = load_data(PENDINGCHALLENGES)
+    challengeHistoryData = load_data(CHALLENGEHISTORY)
+
+    for challenge in challengeData: #for every challenge
+        if challengeData[challenge]["Accepted"] == "False":
+            if int(messageID) == int(challenge) and int(userID) == int(challengeData[challenge]["Challenged"]):
+
+                #assign the challenged to variables for ease
+                challenged = challengeData[challenge]["Challenged"]
+                challenger = challengeData[challenge]["Challenger"]
+                amount = challengeData[challenge]["Bet amount"]
+
+                #incriment counters on the account and accordingly
+                accountData[challenged]["challenges declined"] =+ 1
+
+                #return value to challenger
+                accountData[challenger]["balance"] += int(amount)
+
+                #save a record of what the challenge was
+                challengeHistoryData[messageID] = challengeData[challenge]
+
+                #remove the challenge from actives
+                challengeData.pop(challenge)
+
+                save_data(ACCOUNTS, accountData)
+                save_data(PENDINGCHALLENGES, challengeData)
+                save_data(CHALLENGEHISTORY, challengeHistoryData)
+
+                return(f"<@{challenger}>, <@{challenged}> has declined your challenge... (Coward!)")
+
+def challengeWinner(messageID, winnerID, loserID):
+    accountData = load_data(ACCOUNTS)
+    activeChallengeData = load_data(ACTIVECHALLENGES)
+    historicalChallengeData = load_data(CHALLENGEHISTORY)
+
+    VALUE = (activeChallengeData[messageID]["Bet amount"] * 2)
+
+    #give the winner the gains
+    accountData[winnerID]["challenges won"] += 1
+    accountData[winnerID]["balance"] += int(VALUE)
+    accountData[winnerID]["total gain"] += int(VALUE/2)
+
+    accountData[loserID]["challenges lost"] += 1
+    accountData[loserID]["total loss"] += int(VALUE/2)
+
+    #moves challenge over to history
+    historicalChallengeData[messageID] = activeChallengeData.pop(messageID)
+    historicalChallengeData[messageID]["Winner ID"] = winnerID
+    historicalChallengeData[messageID]["Winner Name"] = accountData[winnerID]["name"]
 
     save_data(ACCOUNTS, accountData)
-    return(f"Your daily bonus is: {bonus} BB Coins! This puts your current balance at {accountData[userName]['balance']}. Come back tomorrow for more!")
+    save_data(ACTIVECHALLENGES, activeChallengeData)
+    save_data(CHALLENGEHISTORY, historicalChallengeData)
+
+    return(f"<@{winnerID}> wins the challenge! They've gained {(VALUE)} BB Coins. <@{loserID}>, better luck next time!")

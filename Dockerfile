@@ -9,7 +9,6 @@ ENV PYTHONUNBUFFERED=1
 
 # Please enter your server token, the name of the channel you want monitored, the channel's id, and the role name for the bet moderators
 ENV TOKEN=
-ENV CHANNELNAME=
 ENV CHANNELID=
 ENV BETMOD=
 
