@@ -1,4 +1,4 @@
-# Basement-Bets 1.0
+# Basement-Bets 1.1 (Challenger update now live)
 # Built and maintained by JackMWhit
 
 Basement-Bets is a discord bot coded in Python that allows server users to place bets and win points. The users can then redeem rewards and anyone who is a part of the betting game can take part in fun challenges!
