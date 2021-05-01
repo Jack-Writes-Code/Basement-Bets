@@ -115,9 +115,13 @@ In the spirit of keeping it fun, please don't submit intentionally bias bets, or
 
 def register_check(userName):
     accountData = load_data(ACCOUNTS)
-    if userName not in accountData:
+    accountList = []
+    for account in accountData:
+        accountList.append(account)
+    if str(userName) in accountList:
+        return(False)
+    else:
         return(True)
-    return(False)
 
 def updateRecord(dataLocation, oldRecord, newRecord):
     data = load_data(dataLocation)
