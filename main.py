@@ -53,7 +53,10 @@ async def on_message(message):
         outPut = betting.place_bet(userID, userMessage, message.id)
         sent_message = await message.channel.send(f"{message.author.mention}, {outPut}")
         print(dateTime, user, outPut)
-        updateRecord(LIVEBETS, message.id, sent_message.id)
+        try:
+            updateRecord(LIVEBETS, message.id, sent_message.id)
+        except KeyError:
+            pass
 
     if userMessage[0] == '!challenge':
         outPut = betting.challenge(userID, userMessage, message.id)
