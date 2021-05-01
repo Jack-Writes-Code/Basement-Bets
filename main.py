@@ -61,6 +61,12 @@ async def on_message(message):
         print(dateTime, user, outPut)
         updateRecord(PENDINGCHALLENGES, message.id, sent_message.id)
 
+    if userMessage[0] == '!gamble':
+        outPut = betting.gamble(userID, userMessage)
+        await message.channel.send(f"{message.author.mention}, {outPut}")
+        print(dateTime, user, outPut)
+
+
     if userMessage[0] == '!balance':
         outPut = balance(userID)
         await message.channel.send(f"{message.author.mention}, {outPut}")

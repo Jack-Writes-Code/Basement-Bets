@@ -286,3 +286,42 @@ def challengeWinner(messageID, winnerID, loserID):
     save_data(CHALLENGEHISTORY, historicalChallengeData)
 
     return(f"<@{winnerID}> wins the challenge! They've gained {(VALUE)} BB Coins. <@{loserID}>, better luck next time!")
+
+def gamble(userID, userMessage):
+    if register_check(userID):
+        return("You are not registered, so you can't challenge others yet.")
+
+    #load data
+    accountData = load_data(ACCOUNTS)
+
+    #check message only contains 2 words (keyword then number)
+    if len(userMessage) > 2:
+        return("Too many arguments given. Please reformat your challenge. The syntax is: '!gamble [value]'")
+
+    #ensure second word is an int
+    try:
+        amount = int(userMessage[1])
+    except ValueError:
+        return("Please reformat your challenge. The syntax is: '!gamble [value]'")
+    except IndexError:
+        return("Please give a value for your gamble. The syntax is: '!gamble [value]'")
+
+    if amount < 5:
+        return("Sorry, minimum gamble is 5.")
+
+    #make sure they can afford the gamble
+    if amount > accountData[userID]["balance"]:
+        return(f"Sorry, you do not have enough money in your account for this gamble. Your current balance is {accountData[userID]['balance']}")
+
+    accountData[userID]["balance"] -= amount
+
+    number = random.randrange(1,3)
+
+    if number == 1:
+        accountData[userID]["balance"] += int(amount*2)
+        outPut = f"Congrats! You won! Your balance has been increased by {int(amount)}. Your new total balance is: {accountData[userID]['balance']}."
+    else:
+        outPut = f"That's a loss I'm afraid. Better luck next time! Your new balance is: {accountData[userID]['balance']}."
+
+    save_data(ACCOUNTS, accountData)
+    return(outPut)

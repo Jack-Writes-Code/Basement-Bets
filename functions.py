@@ -99,6 +99,7 @@ Here's what you can do:
 !register
 !bet [amount] [criteria/what you are betting to happen]
 !challenge [@user to challenge] [amount] [criteria/what to happen]
+!gamble [amount] (a 1 in 3 chance to double your money!)
 !balance (dispays current balance)
 !current (to show current outstanding bets)
 !bonus (gives you a daily bonus of between 1-100BB coins!)
