@@ -16,8 +16,6 @@ except KeyError:
     betMod = 'The id of the role for your betmods'
 
 client = discord.Client()
-
-# datetime object containing current date and time
 dateTime = get_dateTime()
 
 @client.event
@@ -44,11 +42,8 @@ async def on_message(message):
     except IndexError: #if user didn't enter a message, it assigns something to the index to prevent errors
         userMessage = ['blank']
 
-    if userMessage[0] == '!register':
-        outPut = register(userID, user)
-        await message.channel.send(f"{message.author.mention}, {outPut}")
-        print(dateTime, user, outPut)
 
+    #functions the require reaction responses
     if userMessage[0] == '!bet':
         outPut = betting.place_bet(userID, userMessage, message.id)
         sent_message = await message.channel.send(f"{message.author.mention}, {outPut}")
@@ -66,41 +61,33 @@ async def on_message(message):
             updateRecord(PENDINGCHALLENGES, message.id, sent_message.id)
         except KeyError:
             pass
+    ########
 
-    if userMessage[0] == '!gamble':
-        outPut = betting.gamble(userID, userMessage)
+    #main functions
+    funcDict = {
+        '!register': register(userID, user),
+        '!gamble': betting.gamble(userID, userMessage),
+        '!balance': balance(userID),
+        '!current': betting.current_bets(userID),
+        '!shop': rewards.list_all(),
+        '!cashin': rewards.cash_in(userID, userMessage)
+    }
+    if userMessage[0] in funcDict:
+        outPut = funcDict[userMessage[0]]
         await message.channel.send(f"{message.author.mention}, {outPut}")
         print(dateTime, user, outPut)
 
-
-    if userMessage[0] == '!balance':
-        outPut = balance(userID)
-        await message.channel.send(f"{message.author.mention}, {outPut}")
-        print(dateTime, user, outPut)
-
-    if userMessage[0] == '!current':
-        outPut = betting.current_bets(userID)
-        await message.channel.send(f"{message.author.mention}, {outPut}")
-        print(dateTime, user, outPut)
-
+    #Listed seperately due to error where all functions in dict are called when running
     if userMessage[0] == '!bonus':
         outPut = betting.daily_bonus(userID)
         await message.channel.send(f"{message.author.mention}, {outPut}")
         print(dateTime, user, outPut)
+    ########
 
-    if userMessage[0] == '!shop':
-        outPut = rewards.list_all()
-        await message.channel.send(f"{message.author.mention}, {outPut}")
-        print(dateTime, user, outPut)
-
-    if userMessage[0] == '!cashin':
-        outPut = rewards.cash_in(userID, userMessage)
-        await message.channel.send(f"{message.author.mention}, {outPut}")
-        print(dateTime, user, outPut)
 
 @client.event
 async def on_reaction_add(reaction, user):
-    #ensures the message is not from itself and it's in the right channel
+    #ensures the message is in the right channel
     if reaction.message.channel.id != channelID:
         return
 
@@ -109,17 +96,14 @@ async def on_reaction_add(reaction, user):
     betList = []
     for bet in betData:
         betList.append(bet)
-
     challengeData = load_data(PENDINGCHALLENGES)
     challengeList = []
     for challenge in challengeData:
         challengeList.append(challenge)
-
     activeChallengeData = load_data(ACTIVECHALLENGES)
     activeChallengeList = []
     for activeChallenge in activeChallengeData:
         activeChallengeList.append(activeChallenge)
-
     roleList = []
     for role in user.roles:
         roleList.append(role.id)
@@ -137,7 +121,6 @@ async def on_reaction_add(reaction, user):
             await client.get_channel(channelID).send(outPut)
             print(dateTime, outPut)
 
-
     # when the person who wins likes the message
     elif str(reaction.message.id) in activeChallengeList:
         if int(user.id) == int(activeChallengeData[str(reaction.message.id)]["Challenger"]):
@@ -150,7 +133,6 @@ async def on_reaction_add(reaction, user):
             await client.get_channel(channelID).send(outPut)
             print(dateTime, outPut)
 
-
     #detects reactions on live bets
     elif str(reaction.message.id) in betList and betMod in roleList:
         if reaction.emoji == '👍':
@@ -162,13 +144,6 @@ async def on_reaction_add(reaction, user):
             outPut = betting.bet_loss(reaction.message.id)
             await client.get_channel(channelID).send(outPut)
             print(dateTime, outPut)
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':

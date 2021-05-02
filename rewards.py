@@ -34,6 +34,8 @@ def cash_in(userName, userMessage):
         return("Please format your purchase as '!cashin [id of item as seen in !shop list]'")
     except ValueError:
         return("Please format your purchase as '!cashin [id of item as seen in !shop list]'")
+    except IndexError:
+        return("Please enter a number for your purchase. '!cashin [id of item as seen in !shop list]'")
 
 
     rewardData = load_data(REWARDS)
