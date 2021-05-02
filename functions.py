@@ -63,6 +63,8 @@ def register(userID, userName):
         "challenges declined": 0,
         "challenges won": 0,
         "challenges lost": 0,
+        "gamble winnings": 0,
+        "gamble losings": 0,
         "last bonus": get_date()-1
     }
     save_data(ACCOUNTS, accountData)
