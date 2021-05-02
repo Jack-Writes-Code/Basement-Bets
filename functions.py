@@ -1,6 +1,12 @@
 import json
 from datetime import datetime
+from pathlib import Path
 
+#ensure required folders exist, if not: create them
+Path("data/bets").mkdir(parents=True, exist_ok=True)
+Path("data/challenges").mkdir(parents=True, exist_ok=True)
+
+#map the data files
 ACCOUNTS = 'data/accounts.json'
 LIVEBETS = 'data/bets/live.json'
 BETTINGHISTORY = 'data/bets/history.json'
