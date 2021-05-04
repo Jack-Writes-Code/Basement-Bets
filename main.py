@@ -11,9 +11,9 @@ try:
     channelID = int(os.environ['CHANNELID'])
     betMod = int(os.environ['BETMOD'])
 except KeyError:
-    token = 'Your bot key here'
-    channelID = 'Your channelID for the bot to monitor'
-    betMod = 'The id of the role for your betmods'
+    token = 'ODM0MzY5MjMwMTQwMjExMjEw.YH_45g.GoOsSH_IV7IU6h5-pfFkc4pbdQ8'#'Your bot key here as a string'
+    channelID = 834369345596555276#'Your channelID for the bot to monitor'
+    betMod = 834370066551144448#'The id of the role for your betmods'
 
 client = discord.Client()
 dateTime = get_dateTime()
@@ -65,12 +65,12 @@ async def on_message(message):
 
     #main functions
     funcDict = {
-        '!register': register(userID, user),
         '!gamble': betting.gamble(userID, userMessage),
         '!balance': balance(userID),
         '!current': betting.current_bets(userID),
         '!shop': rewards.list_all(),
-        '!cashin': rewards.cash_in(userID, userMessage)
+        '!cashin': rewards.cash_in(userID, userMessage),
+        '!stats': getStats(userID)
     }
     if userMessage[0] in funcDict:
         outPut = funcDict[userMessage[0]]
@@ -78,10 +78,16 @@ async def on_message(message):
         print(dateTime, user, outPut)
 
     #Listed seperately due to error where all functions in dict are called when running
+    if userMessage[0] == '!register':
+        outPut = register(userID, user)
+        await message.channel.send(f"{message.author.mention}, {outPut}")
+        print(dateTime, user, outPut)
+
     if userMessage[0] == '!bonus':
         outPut = betting.daily_bonus(userID)
         await message.channel.send(f"{message.author.mention}, {outPut}")
         print(dateTime, user, outPut)
+    
     ########
 
 

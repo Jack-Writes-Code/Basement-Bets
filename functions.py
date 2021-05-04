@@ -110,6 +110,7 @@ Here's what you can do:
 !gamble [amount] (a 1 in 3 chance to double your money!)
 !balance (dispays current balance)
 !current (to show current outstanding bets)
+!stats (to show your current account statistics)
 !bonus (gives you a daily bonus of between 1-100BB coins!)
 !shop (to see what's available for purchase)
 !cashin [item number as per list in !shop] (purchase your chosen reward!)
@@ -135,3 +136,26 @@ def updateRecord(dataLocation, oldRecord, newRecord):
     data = load_data(dataLocation)
     data[str(newRecord)] = data.pop(str(oldRecord))
     save_data(dataLocation, data)
+
+
+def getStats(userName):
+    if register_check(userName):
+        return("You are not registered, so you have no stats to check.")
+
+    accountData = load_data(ACCOUNTS)
+    data = []
+
+    skipList = ['name', 'balance', 'bets placed', 'challenges issued', 'challenges received', 'last bonus']
+
+    for item in accountData[userName]:
+        if item not in skipList:
+            string = (f"""{item}: {accountData[userName][item]}
+""")
+            data.append(string)
+    
+    sentence = """Here are your current stats:
+"""
+    for match in data:
+        sentence += match
+        #sentence = sentence[:-1]
+    return(sentence)
