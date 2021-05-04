@@ -134,5 +134,4 @@ def register_check(userName):
 def updateRecord(dataLocation, oldRecord, newRecord):
     data = load_data(dataLocation)
     data[str(newRecord)] = data.pop(str(oldRecord))
-    print(f'Record {str(oldRecord)} updated to {str(newRecord)}.')
     save_data(dataLocation, data)
