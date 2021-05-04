@@ -319,11 +319,11 @@ def gamble(userID, userMessage):
 
     if number == 1:
         accountData[userID]["balance"] += int(amount*1.9)
-        accountData[userID]["gamble winnings"] =+ int(amount*0.9)
+        accountData[userID]["gamble winnings"] += int(amount*0.9)
         outPut = f"Congrats! You won! Your balance has been increased by {int(amount*0.9)}. Your new total balance is: {accountData[userID]['balance']}."
     else:
         outPut = f"That's a loss I'm afraid. Better luck next time! Your new balance is: {accountData[userID]['balance']}."
-        accountData[userID]["gamble losings"] =+ int(amount)
+        accountData[userID]["gamble losings"] += int(amount)
 
     save_data(ACCOUNTS, accountData)
     return(outPut)
