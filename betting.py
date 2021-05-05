@@ -313,14 +313,14 @@ def gamble(userID, userMessage):
     if amount > accountData[userID]["balance"]:
         return(f"Sorry, you do not have enough money in your account for this gamble. Your current balance is {accountData[userID]['balance']}")
 
-    accountData[userID]["balance"] -= amount
+    accountData[userID]["balance"] -= int(amount)
 
     number = random.randrange(1,3)
 
     if number == 1:
-        accountData[userID]["balance"] += int(amount*1.9)
-        accountData[userID]["gamble winnings"] += int(amount*0.9)
-        outPut = f"Congrats! You won! Your balance has been increased by {int(amount*0.9)}. Your new total balance is: {accountData[userID]['balance']}."
+        accountData[userID]["balance"] += int(amount* 2)
+        accountData[userID]["gamble winnings"] += int(amount)
+        outPut = f"Congrats! You won! Your balance has been increased by {int(amount)}. Your new total balance is: {accountData[userID]['balance']}."
     else:
         outPut = f"That's a loss I'm afraid. Better luck next time! Your new balance is: {accountData[userID]['balance']}."
         accountData[userID]["gamble losings"] += int(amount)
