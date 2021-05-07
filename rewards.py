@@ -1,7 +1,7 @@
 from functions import *
 
 
-def list_all():
+def list_all(userName):
     rewardData = load_data(REWARDS)
 
     #creates lists for the rewardData
@@ -62,9 +62,3 @@ def cash_in(userName, userMessage):
     save_data(REWARDS, rewardData)
 
     return(f"Congrats! You have purchased: '{name[choiceOfPurchase]}'. The following is now in effect: '{rewardData[name[choiceOfPurchase]]['description']}'.")
-
-
-if __name__ == '__main__':
-    outPut = list_all()
-    #outPut = cash_in("Jack", ["!cash_in", "2"])
-    print(outPut)

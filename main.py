@@ -65,13 +65,13 @@ async def on_message(message):
 
     #main functions
     funcDict = {
-        '!balance': balance(userID),
-        '!current': betting.current_bets(userID),
-        '!shop': rewards.list_all(),
-        '!stats': getStats(userID)
+        '!balance': balance,
+        '!current': betting.current_bets,
+        '!shop': rewards.list_all,
+        '!stats': getStats
     }
     if userMessage[0] in funcDict:
-        outPut = funcDict[userMessage[0]]
+        outPut = funcDict[userMessage[0]](userID)
         await message.channel.send(f"{message.author.mention}, {outPut}")
         print(dateTime, user, outPut)
 
