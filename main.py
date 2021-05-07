@@ -65,11 +65,9 @@ async def on_message(message):
 
     #main functions
     funcDict = {
-        '!gamble': betting.gamble(userID, userMessage),
         '!balance': balance(userID),
         '!current': betting.current_bets(userID),
         '!shop': rewards.list_all(),
-        '!cashin': rewards.cash_in(userID, userMessage),
         '!stats': getStats(userID)
     }
     if userMessage[0] in funcDict:
@@ -85,6 +83,16 @@ async def on_message(message):
 
     if userMessage[0] == '!bonus':
         outPut = betting.daily_bonus(userID)
+        await message.channel.send(f"{message.author.mention}, {outPut}")
+        print(dateTime, user, outPut)
+
+    if userMessage[0] == '!gamble':
+        outPut = betting.gamble(userID, userMessage)
+        await message.channel.send(f"{message.author.mention}, {outPut}")
+        print(dateTime, user, outPut)
+
+    if userMessage[0] == '!cashin':
+        outPut = rewards.cash_in(userID, userMessage)
         await message.channel.send(f"{message.author.mention}, {outPut}")
         print(dateTime, user, outPut)
     
