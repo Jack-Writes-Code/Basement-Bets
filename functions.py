@@ -109,6 +109,7 @@ Here's what you can do:
 !challenge [@user to challenge] [amount] [criteria/what to happen]
 !gamble [amount] (a 1 in 3 chance to double your money!)
 !balance (dispays current balance)
+!give [@user] [amount]
 !current (to show current outstanding bets)
 !stats (to show your current account statistics)
 !bonus (gives you a daily bonus of between 1-100BB coins!)

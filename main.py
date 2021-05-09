@@ -96,6 +96,11 @@ async def on_message(message):
         await message.channel.send(f"{message.author.mention}, {outPut}")
         print(dateTime, user, outPut)
     
+    if userMessage[0] == '!give':
+        outPut = betting.give(userID, userMessage, message.id)
+        await message.channel.send(f"{message.author.mention}, {outPut}")
+        print(dateTime, user, outPut)
+
     ########
 
 

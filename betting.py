@@ -327,3 +327,40 @@ def gamble(userID, userMessage):
 
     save_data(ACCOUNTS, accountData)
     return(outPut)
+
+def give(userID, userMessage, messageID):
+    if register_check(userID):
+        return("You are not registered, so you can't challenge others yet.")
+
+    if len(userMessage) < 3:
+        return("Message too short. Please reformat your donation. The syntax is: '!give [@user] [value]'")
+
+    #ID of the user being challenged
+    try:
+        targetUser = userMessage[1][3:-1]
+    except IndexError:
+        return("Please reformat your challenge. The syntax is: '!give [@user] [value]'")
+
+    if register_check(targetUser):
+        return("The person you're giving to isn't registered for Basement Bets.")
+    if userID == targetUser:
+        return("You can't give to yourself.")
+
+    try:
+        amount = int(userMessage[2])
+    except ValueError:
+        return("Please reformat your donation. The syntax is: '!give [@user] [value]'")
+
+    accountData = load_data(ACCOUNTS)
+
+    #make sure they can afford the challenge
+    if amount > accountData[userID]["balance"]:
+        return(f"Sorry, you do not have enough money in your account for this donation. Your current balance is {accountData[userID]['balance']}")
+
+    #up the numbers on the accounts for challenges issued/received
+    accountData[userID]["balance"] -= int(amount)
+    accountData[targetUser]["balance"] += int(amount)
+
+    save_data(ACCOUNTS, accountData)
+
+    return(f'You have given <@{targetUser}> {amount} BB Coins! Their new balance is {accountData[targetUser]["balance"]}, and yours is {accountData[userID]["balance"]}.')
