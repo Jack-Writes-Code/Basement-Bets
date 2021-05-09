@@ -330,7 +330,7 @@ def gamble(userID, userMessage):
 
 def give(userID, userMessage, messageID):
     if register_check(userID):
-        return("You are not registered, so you can't challenge others yet.")
+        return("You are not registered, so you can't give to others yet.")
 
     if len(userMessage) < 3:
         return("Message too short. Please reformat your donation. The syntax is: '!give [@user] [value]'")
@@ -339,7 +339,7 @@ def give(userID, userMessage, messageID):
     try:
         targetUser = userMessage[1][3:-1]
     except IndexError:
-        return("Please reformat your challenge. The syntax is: '!give [@user] [value]'")
+        return("Please reformat your donation. The syntax is: '!give [@user] [value]'")
 
     if register_check(targetUser):
         return("The person you're giving to isn't registered for Basement Bets.")
@@ -352,6 +352,9 @@ def give(userID, userMessage, messageID):
         return("Please reformat your donation. The syntax is: '!give [@user] [value]'")
 
     accountData = load_data(ACCOUNTS)
+
+    if amount < 1:
+        return("Minimum amount that can be given is 1 BB coin.")
 
     #make sure they can afford the challenge
     if amount > accountData[userID]["balance"]:
