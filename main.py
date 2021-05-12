@@ -4,6 +4,7 @@ from functions import *
 import discord
 import betting
 import rewards
+import pickpocket
 
 # get variables from docker/OS if able. Otherwise declare in python
 try:
@@ -11,9 +12,9 @@ try:
     channelID = int(os.environ['CHANNELID'])
     betMod = int(os.environ['BETMOD'])
 except KeyError:
-    token = 'Your bot key here as a string'
-    channelID = 'Your channelID for the bot to monitor'
-    betMod = 'The id of the role for your betmods'
+    token = 'ODM0MzY5MjMwMTQwMjExMjEw.YH_45g.hPvzD8KdlxVcEFZ4_Ey87P7FW_s'#'Your bot key here as a string'
+    channelID = 834369345596555276#'Your channelID for the bot to monitor'
+    betMod = 834370066551144448#'The id of the role for your betmods'
 
 client = discord.Client()
 dateTime = get_dateTime()
@@ -97,7 +98,12 @@ async def on_message(message):
         print(dateTime, user, outPut)
     
     if userMessage[0] == '!give':
-        outPut = betting.give(userID, userMessage, message.id)
+        outPut = betting.give(userID, userMessage)
+        await message.channel.send(f"{message.author.mention}, {outPut}")
+        print(dateTime, user, outPut)
+
+    if userMessage[0] == '!pickpocket':
+        outPut = pickpocket.steal(userID, userMessage)
         await message.channel.send(f"{message.author.mention}, {outPut}")
         print(dateTime, user, outPut)
 

@@ -33,6 +33,9 @@ def place_bet(userID, userMessage, messageID):
     if amount < 5:
         return("Sorry, minimum bet size must be 5 BB Coins.")
 
+    if len(userMessage) < 3:
+        return("Please reformat your bet. The syntax is: '!bet [value] [criteria]'")
+
     #removes the !bet and amout and then formats the userMessage into a string
     userMessage = ' '.join(userMessage[2:])
 
@@ -328,7 +331,7 @@ def gamble(userID, userMessage):
     save_data(ACCOUNTS, accountData)
     return(outPut)
 
-def give(userID, userMessage, messageID):
+def give(userID, userMessage):
     if register_check(userID):
         return("You are not registered, so you can't give to others yet.")
 
@@ -363,6 +366,10 @@ def give(userID, userMessage, messageID):
     #up the numbers on the accounts for challenges issued/received
     accountData[userID]["balance"] -= int(amount)
     accountData[targetUser]["balance"] += int(amount)
+
+    #trying to fix an error where donor is left with a float
+    accountData[userID]["balance"] = int(accountData[userID]["balance"])
+
 
     save_data(ACCOUNTS, accountData)
 

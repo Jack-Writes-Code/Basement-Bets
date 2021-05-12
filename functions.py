@@ -65,7 +65,8 @@ def register(userID, userName):
         "challenges lost": 0,
         "gamble winnings": 0,
         "gamble losings": 0,
-        "last bonus": get_date()-1
+        "last bonus": get_date()-1,
+        "last pickpocket": get_date()-1
     }
     save_data(ACCOUNTS, accountData)
     return(f"You are now signed up! Your starting balance is {accountData[userID]['balance']}!")
@@ -110,6 +111,7 @@ Here's what you can do:
 !gamble [amount] (a 1 in 3 chance to double your money!)
 !balance (dispays current balance)
 !give [@user] [amount]
+!pickpocket [@user] (small daily chance to steal a fraction of someones money!)
 !current (to show current outstanding bets)
 !stats (to show your current account statistics)
 !bonus (gives you a daily bonus of between 1-100BB coins!)
