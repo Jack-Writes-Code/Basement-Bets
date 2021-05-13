@@ -12,9 +12,9 @@ try:
     channelID = int(os.environ['CHANNELID'])
     betMod = int(os.environ['BETMOD'])
 except KeyError:
-    token = 'ODM0MzY5MjMwMTQwMjExMjEw.YH_45g.wKGYshFRRGuj8CfE35Vp_No0-Ig'#'Your bot key here as a string'
-    channelID = 834369345596555276#'Your channelID for the bot to monitor'
-    betMod = 834370066551144448#'The id of the role for your betmods'
+    token = 'Your bot key here as a string'
+    channelID = 'Your channelID for the bot to monitor'
+    betMod = 'The id of the role for your betmods'
 
 client = discord.Client()
 dateTime = get_dateTime()
