@@ -309,6 +309,18 @@ def gamble(userID, userMessage):
     except IndexError:
         return("Please give a value for your gamble. The syntax is: '!gamble [value]'")
 
+    #if latest gamble was today
+    if accountData[userID]["latest gamble"] == get_date():
+        #and if they've gambled the max
+        if accountData[userID]["gambles today"] > 9:
+            return("Sorry, you've hit your maximum gambles today! Come back tomorrow.")
+        #otherwise add one to the counter
+        accountData[userID]["gambles today"] += 1
+    #if it's the first today set the date and reset counter
+    else:
+        accountData[userID]["latest gamble"] = get_date()
+        accountData[userID]["gambles today"] = 1
+
     if amount < 5:
         return("Sorry, minimum gamble is 5.")
 
@@ -323,10 +335,10 @@ def gamble(userID, userMessage):
     if number == 1:
         accountData[userID]["balance"] += int(amount* 2)
         accountData[userID]["gamble winnings"] += int(amount)
-        outPut = f"Congrats! You won! Your balance has been increased by {int(amount)}. Your new total balance is: {accountData[userID]['balance']}."
+        outPut = f"Congrats! You won! Your balance has been increased by {int(amount)}. Your new total balance is: {accountData[userID]['balance']}. You have {(10 - accountData[userID]['gambles today'])} gambles left today."
     else:
-        outPut = f"That's a loss I'm afraid. Better luck next time! Your new balance is: {accountData[userID]['balance']}."
         accountData[userID]["gamble losings"] += int(amount)
+        outPut = f"That's a loss I'm afraid. Better luck next time! Your new balance is: {accountData[userID]['balance']}. You have {(10 - accountData[userID]['gambles today'])} gambles left today."
 
     save_data(ACCOUNTS, accountData)
     return(outPut)

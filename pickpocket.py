@@ -38,13 +38,13 @@ def steal(userID, userMessage):
     accountData[userID]["last pickpocket"] = get_date()
 
     number = random.randrange(0,25)+1
-    if number != 1:
-        save_data(ACCOUNTS, accountData)
-        return("You failed your pickpocket! Try again tomorrow.")
+    if number == 1:
+        amount = round(accountData[targetUser]["balance"] * 0.1)
+        accountData[targetUser]["balance"] -= int(amount)
+        accountData[userID]["balance"] += int(amount)
+        output = (f"SUCCESS! You steal {int(amount)} from <@{targetUser}>! POG")
     else:
-        amount = int(accountData[targetUser]["balance"] * 0.1)
-        accountData[targetUser]["balance"] -= amount
-        accountData[userID]["balance"] += amount
-        save_data(ACCOUNTS, accountData)
+        output = ("You failed your pickpocket! Try again tomorrow.")
 
-    return(f"SUCCESS! You steal {amount} from <@{targetUser}>! POG")
+    save_data(ACCOUNTS, accountData)
+    return(output)
