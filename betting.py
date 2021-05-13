@@ -12,7 +12,7 @@ def daily_bonus(userID):
 
     accountData[userID]["last bonus"] = get_date()
 
-    bonus = random.randrange(0,100)+1
+    bonus = random.randrange(5,100)+1
 
     accountData[userID]["balance"] += bonus
 
