@@ -150,7 +150,7 @@ def getStats(userName):
     accountData = load_data(ACCOUNTS)
     data = []
 
-    skipList = ['name', 'balance', 'bets placed', 'challenges issued', 'challenges received', 'last bonus']
+    skipList = ['name', 'balance', 'bets placed', 'challenges issued', 'challenges received', 'last bonus', 'latest gamble', 'gambles today', 'last pickpocket']
 
     for item in accountData[userName]:
         if item not in skipList:
