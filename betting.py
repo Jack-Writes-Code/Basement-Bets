@@ -142,23 +142,10 @@ def bet_won(messageID):
 
             accountData[user]["bets won"] += 1 #incriment the accounts bet win total
 
-            if betValue <= 300:
-                gained = betValue*2
-                accountData[betData[bet]["User"]]["balance"] += gained #add the value *2 to the users balance
-                accountData[betData[bet]["User"]]["total gain"] += gained - betValue #add the value to the users total gain
-            elif betValue <= 500:
-                gained = betValue*1.8
-                accountData[betData[bet]["User"]]["balance"] += gained
-                accountData[betData[bet]["User"]]["total gain"] += gained - betValue
-            elif betValue <= 800:
-                gained = betValue*1.6
-                accountData[betData[bet]["User"]]["balance"] += gained
-                accountData[betData[bet]["User"]]["total gain"] += gained - betValue 
-            else:
-                gained = betValue*1.4
-                accountData[betData[bet]["User"]]["balance"] += gained
-                accountData[betData[bet]["User"]]["total gain"] += gained - betValue 
-
+            gained = betValue*2
+            accountData[betData[bet]["User"]]["balance"] += gained #add the value *2 to the users balance
+            accountData[betData[bet]["User"]]["total gain"] += gained - betValue #add the value to the users total gain
+            
             newBalance = accountData[betData[bet]["User"]]["balance"]
             betData.pop(bet) #remove the bet from live_bets
 
