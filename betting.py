@@ -64,7 +64,9 @@ def challenge(userID, userMessage, messageID):
 
     #ID of the user being challenged
     try:
-        targetUser = userMessage[1][3:-1]
+        targetUser = userMessage[1][2:-1]
+        if targetUser[0] == '!':
+            targetUser = targetUser[1:]
     except IndexError:
         return("Please reformat your challenge. The syntax is: '!challenge [@user] [value] [criteria]'")
 
@@ -339,7 +341,9 @@ def give(userID, userMessage):
 
     #ID of the user being challenged
     try:
-        targetUser = userMessage[1][3:-1]
+        targetUser = userMessage[1][2:-1]
+        if targetUser[0] == '!':
+            targetUser = targetUser[1:]
     except IndexError:
         return("Please reformat your donation. The syntax is: '!give [@user] [value]'")
 

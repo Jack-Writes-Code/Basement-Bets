@@ -12,7 +12,9 @@ def steal(userID, userMessage):
 
     #ID of the user being challenged
     try:
-        targetUser = userMessage[1][3:-1]
+        targetUser = userMessage[1][2:-1]
+        if targetUser[0] == '!':
+            targetUser = targetUser[1:]
     except IndexError:
         return("Please reformat your pickpocket. The syntax is: '!pickpocket [@user]'")
 
