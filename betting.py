@@ -359,8 +359,8 @@ def give(userID, userMessage):
 
     accountData = load_data(ACCOUNTS)
 
-    if amount < 1:
-        return("Minimum amount that can be given is 1 BB coin.")
+    if amount < 5:
+        return("Minimum amount that can be given is 5 BB coin.")
 
     #make sure they can afford the challenge
     if amount > accountData[userID]["balance"]:
