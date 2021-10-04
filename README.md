@@ -1,7 +1,7 @@
-# Basement-Bets 1.2 (Pickpocket update now live)
-# Built and maintained by JackMWhit
+# Basement-Bets 1.2
+#NO LONGER UNDER DEVELOPMENT.
 
-Basement-Bets is a discord bot coded in Python that allows server users to place bets and win points. The users can then redeem rewards and anyone who is a part of the betting game can take part in fun challenges!
+Basement-Bets was my first ever discord bot coded in Python that allows server users to place bets and win points. The users can then redeem rewards and anyone who is a part of the betting game can take part in fun challenges!
 
 Our original deployment for this is intended so we can have fun spontaniously choosing eachother's characters or roles in games for some fun.
 
